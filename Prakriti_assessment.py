@@ -90,19 +90,31 @@ for i, q in enumerate(questions):
     
     st.write("---")
 
+st.write("### Results:")
+st.write(f"- **Vata:** {vata_count}")
+st.write(f"- **Pitta:** {pitta_count}")
+st.write(f"- **Kapha:** {kapha_count}")
+st.write("----")
 # Submit button
 if st.button("Submit"):
     # Prepare data to send
-    data = {
-        "patient_name": patient_name,
-        "patient_id": patient_id,
-        "responses": responses,
-        "totals": {
-            "vata": vata_count,
-            "pitta": pitta_count,
-            "kapha": kapha_count
+    if not patient_name.strip():
+        st.error("Patient Name is required.")
+    elif not patient_id.strip():
+        st.error("Patient ID is required.")
+    elif any(not (response["vata"] or response["pitta"] or response["kapha"]) for response in responses):
+        st.error("All questions must be answered.")
+    else:
+        data = {
+            "patient_name": patient_name,
+            "patient_id": patient_id,
+            "responses": responses,
+            "totals": {
+                "vata": vata_count,
+                "pitta": pitta_count,
+                "kapha": kapha_count
+            }
         }
-    }
-    
-    # Call the API placeholder function
-    submit_to_api(data)
+        
+        # Call the API placeholder function
+        submit_to_api(data)
